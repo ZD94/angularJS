@@ -1,0 +1,91 @@
+//定义首页的核心模块
+var routerApp = angular.module('routerApp',['ui.router','loginApp','pageList','xg.page','addCont','modifyCont','showCont']);
+//首先，调用一下run方法，run方法一般情况下是在angular启动之前，如果有一些初始化的任务
+//通常情况下，我们会把这些任务放到run方法里面去.
+routerApp.run(function($rootScope,$state,$stateParams){
+    //$state是关于当前路径的信息
+    $rootScope.$state = $state;
+    //console.log($state);
+    //$stateParams是关于当前路径的参数信息.
+    $rootScope.$stateParams = $stateParams;
+    //将他们都挂载到$rootScope上，是为了以后访问的时候方便.
+    //在这里，你也可以将一些变量挂载到全局上,以便数据共享.
+})
+routerApp.config(function($stateProvider,$urlRouterProvider){
+    //当路由过来的时候，它会去寻找$stateProvider里面定义的路由规则
+    //一旦说没找到，那么它会直接访问/index
+    $urlRouterProvider.otherwise('/index');
+    $stateProvider
+        //首页
+        .state('index',{
+            url:'/index',//路径是可以自由指定的,一般都是跟状态同名的
+            views:{
+                '':{
+                    templateUrl:"tpls/home.html"
+                },
+                //main视图是index状态下面的
+                //嵌套的视图必须要表名一下跟上级视图之间的关联.
+                'main@index':{
+                    templateUrl:"tpls/login.html"
+                }
+            }
+        })
+        .state('list',{
+            // /0,/1,/2,/3,/4....
+            url:'/{type:[0-9]{1,4}}',
+            views:{
+                '':{
+                    templateUrl:'tpls/list.html'
+                },
+                'type@list':{
+                    templateUrl:'tpls/type.html'
+                },
+                'grid@list':{
+                    templateUrl:'tpls/grid.html'
+                }
+            }
+        })
+        .state('add',{
+            url:'/add',
+            views:{
+                '':{
+                    templateUrl:'tpls/add.html'
+                },
+                'type@add':{
+                    templateUrl:'tpls/type.html'
+                },
+                'addcon@add':{
+                    templateUrl:'tpls/addcon.html'
+                }
+            }
+        })
+        .state('modify',{
+            url:'/modify/:Id',
+            views:{
+                '':{
+                    templateUrl:'tpls/modify.html'
+                },
+                'type@modify':{
+                    templateUrl:'tpls/type.html'
+                },
+                'modifycon@modify':{
+                    templateUrl:'tpls/modifycon.html'
+                }
+            }
+        })
+        .state('show',{
+            url:'/show/:Id',
+            views:{
+                '':{
+                    templateUrl:'tpls/show.html'
+                },
+                'type@show':{
+                    templateUrl:'tpls/type.html'
+                },
+                'showcon@show':{
+                    templateUrl:'tpls/showcon.html'
+                }
+            }
+        })
+})
+
